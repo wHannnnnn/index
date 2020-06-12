@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    function selectionSort(arr) {
+        var minIndex;
+        for (var i = 0; i < arr.length - 1; i++) {
+            minIndex = i;
+            for (var j = i + 1; j < arr.length; j++) {
+                if (arr[j] < arr[minIndex]) {    // 寻找最小的数
+                    minIndex = j;                // 将最小数的索引保存
+                }
+            }
+            [arr[i],arr[minIndex]] = [arr[minIndex],arr[i]]
+        }
+        return arr;
+    }
+    selectionSort([2,34,5,566,7,78,8,98,99,0,90])
+
+</script>
+</html>

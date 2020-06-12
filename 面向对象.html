@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        #box {
+            width: 100px;
+            height: 100px;
+            background: red;
+            position: absolute;
+            left: 100px;
+            top: 100px;
+            padding: 10px 20px 30px;
+            padding-bottom: 25px;
+            padding-bottom: 15px;
+            border: 5px solid #000
+        }
+        #box2 {
+            width: 100px;
+            height: 100px;
+            background: blue;
+            position: absolute;
+            left: 300px;
+            top: 100px;
+
+        }
+        .box {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+        }
+        .box1 {
+            background: yellow;
+        	left: 50px;
+            top: 50px;
+        }
+        .box2 {
+            background: #333;
+        	left: 150px;
+            top: 150px;
+        }
+        .box3 {
+            background: blue;
+        	left: 250px;
+            top: 250px;
+        }
+        .box4 {
+            background: red;
+        	left: 100px;
+            top: 100px;
+        }
+    </style>
+</head>
+<body>
+<div id="box"></div>
+<div id="box2"></div>
+<!-- <div class="content">
+	<div class="box box1">aa</div>
+	<div class="box box2">bb</div>
+	<div class="box box3">cc</div>
+	<div class="box box4">dd</div>
+</div> -->
+</body>
+<script>
+    (function (window) {
+        function Drag(id) {
+            this.ele = document.getElementById(id)
+            this.fnDown()
+           	this.aX = 0;
+           	this.aY = 0;
+        }
+        Drag.prototype.fnDown = function () {
+            var that = this
+            this.ele.onmousedown = function (e) {
+                e = e || event
+                that.aX = e.clientX - this.offsetLeft
+                that.aY = e.clientY - this.offsetTop
+                document.onmousemove = function () {
+                    var name = 'asd'
+                    that.fnMove()
+                }
+                document.onmouseup = function () {
+                    that.fnUp()
+                }
+            }
+          return false
+        }
+        Drag.prototype.fnMove = function (e) {
+            e = e || event
+            this.ele.style.left = e.clientX - this.aX + "px"
+            this.ele.style.top = e.clientY - this.aY + "px"
+        }
+        Drag.prototype.fnUp = function () {
+            document.onmousemove = null
+        }
+        window.Drag = Drag;
+    })(window)
+    var aDrag1 = new Drag("box")
+
+    var a = {
+        name: 'zhang',
+        sayName: function(){
+            console.log(this.name)
+        }
+    }
+    var name = 'ling'
+    function sayName(){
+        var sss  = a.sayName
+        sss() //ling
+        a.sayName() //zhang
+        // (a.sayName)() //zhang
+        // (b=a.sayName)()//ling
+    }
+    sayName()
+    // var aDrag2 = new Drag("box2")
+</script>
+</html>

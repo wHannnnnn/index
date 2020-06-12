@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<span id="asd">asd</span>
+</body>
+<script>
+	//原型链继承
+// 	function person(name){
+// 		this.name = name
+// 		this.age = 24
+// 		this.happy = ['aa']
+// 	}
+// 	person.prototype.sex = 'o1o'
+// 	person.prototype.personspeak = function(){
+// 		console.log(this.happy)
+// 	}
+// 	function dog(){
+// 		this.dogname = 'hanhan'
+// 	}
+//   	dog.prototype = new person('wanghan')  //将dog的原型对象覆盖为 person的实例
+// 	dog.prototype.speak = function(){
+// 		console.log('wangwang')
+// 	}
+// 	var newperson = new dog()
+// 	console.log(newperson.happy) //['aa'] 
+// 
+// 	newperson.happy.push('bb') //  修改了原型对象上引用类型的值，会导致其它实例也跟着受影响 
+// 	console.log(newperson.happy)  //["aa", "bb"]  实例的属性改变不会影响原型  原型对象上的任何值都不会被实例覆盖
+// 
+// 	var newperson1 = new dog()
+// 	console.log(newperson1.happy) //["aa", "bb"] 修改了原型对象上引用类型的值，会导致其它实例也跟着受影响
+// 	console.log(newperson1.age)
+// 	// 先找newperson实例 再找newperson原型对象 原型对象覆盖为 person的实例 找person实例 再找perosn原型对象
+// 
+// 	newperson.personspeak()
+// 	newperson1.personspeak()
+// 
+// 	// 构造函数继承   在子类的构造函数中，通过 apply ( ) 或 call ( )的形式，调用父类构造函数，以实现继承。每个实例都拷贝一份，占用内存大
+// 	function mine(){
+// 		this.name = 'wh'
+// 		this.age = 18
+// 		this.happy = ['cc']
+// 	}
+// 	function your (){
+// 		this.sex = 'oo'
+// 		mine.call(this)
+// 	}
+// 	var amine = new your()
+// 	console.log(amine.happy) // ["cc"]
+// 
+// 	amine.happy.push('dd')
+// 	console.log(amine.happy)  //  ["cc", "dd"] 修改了原型对象上引用类型的值，其它实例不受影响 
+// 
+// 	var amine1 = new your()
+// 	console.log(amine1.happy) // ["cc"]  修改了原型对象上引用类型的值，其它实例不受影响
+// 
+
+	//使用两种方式组合继承  避免组合继承大量实例多次拷贝
+	function Person () {
+      this.name = 'wh';
+      this.array = ['aa', 'bb'];
+    }
+   //  //将 Person 类中需共享的方法放到 prototype 中，实现复用
+    Person.prototype.eat = function () {
+      console.log(this.array);
+    }
+    Person.prototype.sleep = function () {
+      console.log('sleep');
+    }
+   //  //继承父类实例 this
+    function Student(studentID) {
+      this.studentID = studentID;
+      Person.call(this);
+    }
+    
+    Student.prototype = new Person(); //不写无法调用Person原型中的方法
+    
+	  console.log(Student.prototype)
+    var stu1 = new Student(123);
+
+    stu1.array.push('cc');
+    // console.log(stu1.array); //["aa", "bb", "cc"]
+    console.log(stu1); //["aa", "bb"]
+    
+    var stu2 = new Student(124);
+    console.log(stu2); //["aa", "bb"]
+    
+    // console.log(stu2.array); //["aa", "bb"]
+
+    // stu1.eat(); //["aa", "bb", "cc"]
+    // stu2.eat(); //["aa", "bb"]
+	
+// 	var asd = document.getElementById('asd')
+// 	Person.call(asd)
+// 	console.log(asd.array)
+// 	
+// 	var msg = sessionStorage.getItem("data")
+// 	console.log(msg)
+
+
+// function person(id=19){
+//   this.id = id
+//   this.sex = 'zz'
+//   this.array = [1,2,3,4]
+//   this.speak()
+// }
+// person.prototype.speak = function(){
+//   this.speak = 'chinese'
+//   console.log(this.id)
+// }
+// function person1(id){
+//   this.height = '180'
+//   person.call(this,id)
+// }
+// person1.prototype = person.prototype
+// var aa = new person1(11)
+// // aa.speak()
+// // aa.sex ='ss'
+// // var bb = new person1(22)
+// // bb.speak()
+// // console.log(bb.sex)
+// // var cc = new person1()
+// // cc.speak()
+
+// function click(element){
+//     element.onmousedown = function (e){
+//       console.log(e)
+//       console.log(this)
+//   }
+// }
+// click(document.getElementById('asd'))
+
+// let arr = ['a','b','c','d'];
+
+// const chunk = (arr,chunkLength) => {
+//   const arr1 = []
+//   arr1[0] = arr.slice(0,chunkLength)
+//   for(let i = chunkLength;i< arr.length;i++){
+//     if(arr1[arr1.length-1].length === chunkLength){
+//       arr1.push([])
+//       console.log(arr1)
+//     }
+//     arr1[arr1.length-1].push(arr[i])
+
+//   }
+//   return arr1
+// }
+// let result = chunk(arr,1)
+// console.log(result)
+// let a = ['a','b','c','d'];
+// function chunk(a, num) {
+//   const iconsArr = [];
+//   a.forEach((item, index) => {
+//     const page = Math.floor(index / num); // 向下取整
+//     if (!iconsArr[page]) { // 数组索引不存在创建
+//       iconsArr[page] = [];
+//     }
+//     iconsArr[page].push(item); //元素添加
+//   });
+//   return iconsArr
+// }
+// let result = chunk(a,2)
+// console.log(result)
+
+// function Person(name){
+//   console.log('Hi! this is ' + name + '!')
+// }
+// Person.prototype.sleep = function(time){
+//   // console.log('Eat ')
+//   console.log(time)
+//   return this
+//   setTimeout(()=>{
+//     // return this
+//     console.log('aa')
+//   },time)
+//   // function eat(dinner){
+//   //   console.log('Eat' + dinner)
+//   // }
+// }
+// Person.prototype.eat = function(dinner){
+//     console.log('Eat' + dinner)
+//   return this
+
+// }
+// // Person('Li')
+// // Person("Dan").sleep(10)
+// var Person = new Person('hh')
+// Person.sleep(1000).eat('dinner')
+// aa.eat('dinner').eat('dinner')
+// function Person(name){
+// 　　return new _Person(name);
+// }
+
+// function _Person(name) {
+// 　　this.task=[];
+// 　　var that=this;
+// 　　var fn=(function(name){
+// 　　　　return function(){
+// 　　　　　　console.log("Hello I'm "+name);
+// 　　　　　　that.next();
+// 　　　　}
+// 　　})(name);
+// 　　this.task.push(fn);
+// 　　setTimeout(function(){that.next()},0)
+// }
+// _Person.prototype={
+// 　　constructor:_Person,
+// 　　next:function(){
+// 　　　　var fn=this.task.shift();
+// 　　　　fn&&fn()
+// 　　},
+// 　　sleep:function(time){
+// 　　　　var that=this
+// 　　　　var fn=(function(time){
+// 　　　　　　return function(){
+// 　　　　　　　　setTimeout(function(){
+//                     console.log('Wake up after ' + time)
+// 　　　　　　　　　　that.next()
+// 　　　　　　　　},time*1000)
+// 　　　　　　}
+// 　　　　})(time)
+// 　　　　this.task.push(fn);
+// 　　　　return this
+// 　　},
+// 　　eat:function(food){
+// 　　　　var that=this
+// 　　　　var fn=(function(food){
+// 　　　　　　　　return function(){
+//                   console.log('Eat ' + food)
+// 　　　　　　　　  that.next()
+// 　　　　　　　　}
+// 　　　　　　})(food)
+// 　　　　　　this.task.push(fn)
+// 　　　　　　return this
+// 　　　　}
+// 　　}
+// // Person("Li")
+// Person("Dan").sleep(10).eat("dinner")
+// // Person("Jerry").eat("dinner").eat("supper")
+
+// let version = 'V0.11.12'
+// let arr = version.split('.')
+// let verarr = []
+// verarr.push(version)
+// const fn ={
+//   version: arr,
+//   oldArr: verarr,
+//   patch: function(){
+//     let lastNum = Number(this.version[2]) + 1
+//     let allNum = arr[0] + '.' + arr[1] + '.' + lastNum
+//     this.js(allNum)
+//   },
+//   minor: function(){
+//     let lastNum = 0
+//     let secondNum = Number(this.version[1]) + 1
+//     let allNum = arr[0] + '.' + secondNum + '.' + lastNum
+//     this.js(allNum)
+//   },
+//   major: function(){
+//     let lastNum = 0
+//     let secondNum = 0
+//     let lastr = this.version[0].substr(1)
+//     let firstr = this.version[0].substr(0,1)
+//     let fitstNum = firstr + (Number(lastr) +1)
+//     let allNum =fitstNum + '.' + secondNum + '.' + lastr
+//     this.js(allNum)
+//   },
+//   rollback: function(){
+//     console.log(this.oldArr[this.oldArr.length-2])
+//     return this.oldArr[this.oldArr.length-1]
+//   },
+//   js: function(allNum){
+//     this.oldArr.push(allNum)
+//     let newverson = allNum
+//     this.version = newverson.split('.')
+//     console.log(allNum)
+//     return allNum
+//   }
+// }
+// fn.patch()
+// fn.minor()
+// fn.major()
+// fn.rollback()
+
+
+// function fn(object, value) {
+//   let valueItem = value.split(".")
+//   let aobject = object
+//   for (let i = 0; i < valueItem.length; i++) {
+//     let item = valueItem[i].replace(/\[|\]/g, '').split('');
+//     for (let j = 0; j < item.length; j++) {
+//       try {
+//         aobject = aobject[item[j]]
+//       } catch (error) {
+//         return "Is err about '"+ valueItem[i - 1] + "'," + null
+//       }
+//     }
+//   }
+//   return null+ ',' +aobject
+// }
+// let object = {'a': [{'b': {'c': 3}}]}
+// console.log(fn(object, 'a[0].b.c'))
+// console.log(fn(object, 'a[0].d.c'))
+
+// var arr = [1,2,3,4,5]
+// let arr1 = [{
+//     key:1,
+//     value: '',
+// }, {
+//     key:3,
+//     value:4,
+// }]
+// let newarr = arr1
+// function asd (){
+//   try{
+//     newarr.every((item,index)=>{
+//       if(item.value ==''){
+//         throw new Error('qqq')
+//       }
+//       console.log('asd')
+//     })
+//     console.log('zxc')
+//   } catch(error){
+
+//   }
+//   console.log('qwe')
+// }
+// asd()
+// const iterable = new Map(arr1)
+// console.log(iterable)
+// function asd (){
+// 
+//   for(let [key,value] of iterable){
+//     console.log(key)
+//     // if(value.value == ''){
+//     //   value.value = 2
+//     // }
+//   }
+// }
+// asd()
+// console.log(arr1)
+// function asd (){
+//   for (var i = 0; i < newarr.length; i++) {
+//     if(newarr[i].value == '') {
+//       return
+//     }
+//     console.log('asd')
+//   }  
+// }
+// asd()
+// arr1.forEach((item,index)=>{
+//   item.key = item.key*2
+// })
+// console.log(arr1)
+
+// let newarr = arr1.map(item => item.a*2)
+// let newarr = arr1.map(item => {
+//   var rObj = {};
+//   rObj.key = item.a;
+//   return rObj
+// })
+// let newarr = arr1.map(item => {
+//   if(item.a ==1) {
+//     return item
+//   }
+// }).filter(item => item)
+// arr1.map(item => {
+//   if(item.a ==1) {
+//     return item
+//   }
+// })
+// console.log(newarr)
+// console.log(arr1)
+
+
+
+</script>
+</html>

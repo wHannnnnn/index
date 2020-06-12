@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			.center{
+				/* width: 20px; */
+				/* height: 100px; */
+				background-color: #333;
+				margin: 0 10px;
+				display: flex
+				/* flex:0 1 0%; */
+				/* left:50%; */
+				/* top:50%; */
+				/* transform: translate(-50%,-50%) */
+			}
+			.center1 {
+				width: 150px;
+				background: red
+			}
+			.center2 {
+				flex: 1
+			}
+			.center21 {
+				background: yellow;
+				flex: 1
+			}
+			.center3 {
+				width: 100px;
+				background: blue
+			}
+			.flex{
+				position: relative;
+				/* width:100%; */
+				/* height:100%; */
+				/* display: flex; */
+				/* flex-wrap: wrap; */
+				/* align-items: center; */
+				/* justify-content: center; */
+			}
+			
+			/* body,html { margin:0; width:100%; height:100%; } */
+			/*flex： 0 1 auto  flex-grow 子元素的剩余空间分配  flex-shrink：1子元素等比缩小 0不缩小 flex-basis元素理想宽度*/
+/* 			.center{
+				flex:1
+			} */
+		</style>
+	</head>
+	<body>
+		<div class="flex">
+			<div class="center">
+				<div class="center1">111</div>
+				<div class="center21">222</div>
+				<div class="center3">333</div>
+			</div>
+			<!-- <div class="box">asd</div> -->
+		</div>
+		<input id="inp" type="text">
+		<button id="butt">点击</button>
+	</body>
+	<script>
+		var arrObj1 = [{name: 'aa'},{name: 'bb'},{name: 'cc'}]
+		var arrObj2 = [{ name: 'aa' }, { name: 'cc' }]
+		var newArrObj = []
+		arrObj1.forEach(e=>{
+			var obj = arrObj2.find(ele=>{
+				return ele.name == e.name
+			})
+			!obj && newArrObj.push(e)
+		})
+		console.log(newArrObj)
+		var obj = {
+			butt: document.getElementById('butt'),
+			inp: document.getElementById('inp'),
+			// 事件绑定 ie低版本和其他有区别
+			// 绑定封装
+			events:function(ele,type,callback){
+				// 普通浏览器
+				if(ele.addEventListener){
+					ele.addEventListener(type,callback,false)
+				}else if(ele.attachEvent){
+					// ie678
+					ele.attachEvent('on'+type,function(){
+						//this指向window 修改this指向
+						callback.call(ele)
+					})
+				} else{
+					ele['on'+ type] = callback
+				}
+			},
+			//闭包 读取函数内部变量bbarr 监听变量
+			bibao:(function(){
+				var bbarr = []
+				return {
+						addarr: function(value){
+							if(bbarr.indexOf(value) == -1){
+								bbarr.push(value)
+								console.log(bbarr,'首次传入')
+							} else {
+								console.log(bbarr,'已存在')
+							}
+						},
+						destory: function(){
+							bbarr = null
+						}
+					}
+			})(),
+		}
+		obj.events(obj.butt,'click',function(){
+			console.log(this)
+		})
+		
+		// 闭包实例 文本框输入验证 错误的内容存储到闭包中 再次输入不需要验证
+		obj.events(obj.inp,'blur',function(e){
+			// console.log(obj.inp.value,e.target.value)
+			obj.bibao.addarr(obj.inp.value)
+		})
+		
+		
+		// 继承 原型链继承 + 构造函数继承 = 组合继承
+		//原型链继承 父类的实例 = 子类的原型 实例不可以传递参数
+		// function Person(name){
+		// 	this.name = name
+		// 	this.arr = [1,2,3]
+		// }
+		// Person.prototype.sayName = function(){
+		// 	console.log(this.name)
+		// }
+		//  function han(){
+		// 	 this.age = 25
+		//  }
+		//  han.prototype.asd=function(){
+		// 	 console.log('asd')
+		//  }
+		//  han.prototype = new Person('hanhan')
+		//  var newperson = new han()
+		//  var newperson1 = new han()
+		//  console.log(newperson.__proto == newperson1.__proto)
+		 // console.log(newperson1.sayName())
+		//  console.log(han.prototype.constructor==Person)
+		//  console.log(newperson.__proto__ === han.prototype)
+		//  console.log(newperson.__proto__.__proto__  == Person.prototype)
+		//  console.log(Person.prototype.__proto__ == Object.prototype)
+		//  console.log(newperson.__proto__.__proto__.__proto__ == Object.prototype)
+		//  console.log(newperson.__proto__.__proto__.__proto__.__proto__ == null)
+		//  newperson.arr.push(5) //原型链继承所有实例共享引用属性
+		//  var newperson1 = new han()
+
+
+
+
+// 组合继承 实例可以传递参数 调用了两次父类构造函数
+// 		function Person(name){
+// 			this.name = name
+// 			this.arr = [1,2,3]
+// 		}
+// 		Person.prototype.sayName = function(){
+// 			console.log(this.name)
+// 		}
+// 		 function han(name){
+// 			 this.age = 25
+// 			 Person.call(this,name)
+// 		 }
+// 		 han.prototype = new Person()
+// 		 var newperson = new han('hanhan')
+// 		 newperson.arr.push(4)
+// 		 newperson.sayName()
+// 		 var newperson = new han('guoguo')
+// 		 console.log(newperson)
+// 
+		// es6 Class继承
+		// class Person{
+		// 	constructor(name){
+		// 		this.name = name
+		// 		this.arr = [1,2,3]
+		// 	}
+		// 	sayName(){
+		// 		console.log(this.name)
+		// 	}
+		// }
+// 		var han = new Person()
+// 		han.sayName()
+		
+		// class Person1 extends Person{
+		// 	constructor(name,age){
+		// 		super(name)
+		// 	}
+		// 	say(){
+		// 		super.sayName()
+		// 		console.log(this.arr)
+		// 	}
+		// }
+
+		// var han = new Person1('hanhan',23)
+		// han.say()
+// 组合寄生继承 父类类构造函数的属性复制给子类 父类构造函数的prototype指向子类构造函数的prototype 子类创建父类不会影响  不需要调用两次父类构造函数
+// 不可以直接han.prototype=Person.prototype   han.prototype添加属性Person.prototype也会有这个属性
+//Object.create()  
+// 原理重新创建一个构造函数 这个构造函数的 prototype等于父类构造函数的prototype 这个构造函数的constructor指向子类 子类的prototype等于这个构造函数
+		function Person(name){
+			this.name = name
+			this.arr = [1,2,3]
+		}
+		Person.prototype.sayName = function(){
+			console.log(this.name)
+		}
+		 function han(name){
+			 Person.call(this,name)
+			 this.arr = [0,1] 
+			 this.age = 25
+		 }
+
+		 function jicheng(father,son){
+// 			 var newfn = function(){}
+// 			 newfn.prototype = father.prototype
+// 			 newfn.constructor = son
+// 			 son.prototype = new newfn()
+			 
+			var newobj = Object.create(father.prototype) //返回一个新的对象的__proto__ = Person.prototype)
+			// newobj.constructor = son //添加constructor属性，弥补因重写原型而失去的默认的constructor属性
+			son.prototype = newobj 
+			son.prototype.constructor = son
+		 }
+		 jicheng(Person,han)
+		 han.prototype.asd = function(){}
+		 var newperson = new han('hanhan')
+		 console.log(newperson)
+		// 继承结束
+
+// this指向
+	// var aname = 'guoguo'
+	// var objthis = {
+	// 	aname: 'hanhan',
+	// 	btnh:function(){
+	// 		console.log(this)
+	// 	},
+	// 	btnh1:()=>{
+	// 		console.log(this.aname)
+	// 	},
+	// 	btnh2:function(){
+	// 		(function(){
+	// 			console.log(this.aname)
+	// 		})()
+	// 	},
+	// }
+// 	
+// 	objthis.btnh() //hanhan
+// 	var aa = objthis.btnh
+// 	aa() //guoguo
+
+// 	题!!!!!!!!!!!!!!!!!!!!
+// 	let count = 1
+// 	let user = {
+// 		count: 2,
+// 		getCount: function() {
+// 			count = 1
+// 			return this.count
+// 		},
+// 		addCount: ()=>{
+// 			this.count = 3
+// 		}
+// 	}
+// 	user.getCount()
+// 	let func = user.getCount
+// 	user.addCount()
+// 	console.log(user.getCount())
+// 	console.log(func())
+
+
+// 	//箭头函数没有this 跟随他的上级的作用域this
+// 	objthis.btnh1() //guoguo
+// 	var bb = objthis.btnh1
+// 	bb() //guoguo
+// 	
+// 	objthis.btnh2() //hanhan
+// 	var cc = objthis.btnh2
+// 	cc() //guoguo
+	
+// 	var dd = new objthis.btnh()
+// 	function aa(){
+// 		this.name = 0
+// 		// console.log(this.name)
+// 	}
+// 	var zz = new aa() //构造函数生成对象 this指向实例zz对象
+// 	console.log(zz.name)
+	
+	
+	// 异步 回调函数 js单线程 promise async await
+	//普通的回调函数 同步的 
+// 	 function first (name,callback){
+// 		 var value = name + 'guoguo'
+// 		 second(value,function(secondvalue){
+// 			 third(secondvalue,function(res){
+// 				 // .........n个
+// 				 callback(res)
+// 			 })
+// 		 })
+// 	 }
+// 	 
+// 	 function second(value,callback){
+// 		 var value1 = value + 'love'
+// 		 callback(value1)
+// 	 }
+// 	 function third(value,callback){
+// 		 var value2 = value + '1314'
+// 		 callback(value2)
+// 	 }
+// 	 
+// 	 first('hanhan',function(res){
+// 		 console.log(res)
+// 	 })
+	 
+	 //使用promise处理回调函数 值return出来
+// 	 var first = function(name){
+// 		 return new Promise((resolve,reject)=>{
+// 		 		 resolve(name)
+// 		 		 reject('error')
+// 		 }).then((name)=>{
+// 		 		 return second(name)
+// 		 }).then((name1)=>{
+// 		 		 return third(name1)
+// 		 }).then((value)=>{
+// 		 		 console.log(value)
+// 		 })
+// 	 }
+// 	 first('hanhan')
+	 
+	//  function second(name){
+	// 	 return name + 'guoguo'
+	//  }
+	//  function third(name){
+	// 	 return name + 'love'
+	//  }
+	 
+	 //使用 async swait
+// 	 async function first(name){
+// 		 return name
+// 		 var name1 = await second(name)
+// 		 var value = await third(name1)
+// 		 console.log(value)
+// 	 }
+// 	 first('hanhan')
+// js执行顺序 
+// 	async function async1() {
+// 		console.log(1)
+// 		await async2()
+// 		setTimeout(function(){
+// 			console.log(2)
+// 		},0)
+// 	}
+// 	async function async2() {
+// 		setTimeout(()=>{
+// 			console.log(3)
+// 		},0)
+// 	}
+// 	console.log(4)
+// 	setTimeout(function(){
+// 		console.log(5)
+// 	},0)
+// 	new Promise(function(resolve){
+// 		resolve()
+// 		console.log(6)
+// 		setTimeout(function(){
+// 			console.log(8)
+// 		},0)
+// 	}).then(()=>{
+// 		console.log(7)
+// 	})
+// 	async1()
+	// 变量解构赋值 扩展运算符
+	// function push(arr,arr1){
+	// 	// var newarr = [...arr,...arr1]
+	// 	arr.push(...arr1)
+	// 	console.log(arr)
+	// }
+	// push([1,32,3],[2,3,555])
+	// function add(x,y){
+	// 	console.log(x + y)
+	// }
+	// add(...[1,22,3])
+	
+	// // 浅拷贝影响原属性 只拷贝原对象的第一层属性  浅拷贝其实就是简单的复制第一层，深层的改变依然会受影响
+	// const a1 = [{ foo: 1 }]
+	// const a2 = [{ bar: 2 }]
+
+	// const a3 = a1.concat(a2)
+	// const a4 = [...a1, ...a2]
+	// //只拷贝原对象的第一层属性 修改新属性会影响原属性
+	// a3[0].foo = 10
+	// console.log(a4,a3,a1)
+	
+	// const arr1 = [1,2,3]
+	// const arr2 = [4,5,6]
+	
+	// const arr3 = arr1.concat(arr2)
+	// const arr4 = [...arr1, ...arr2]
+	// //拷贝原对象的第一层属性 不会影响原属性 
+	// arr3.push(10)
+	// console.log(arr3,arr4,arr1)
+	</script>
+</html>

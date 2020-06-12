@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<!-- <audio src="只有爱过.mp3" ref="foo" controls="true"> </audio> -->
+	<div id="name">
+		<span>1</span>
+		<span>2</span>
+		<span>3</span>
+	</div>
+	<input type="text" id="inp" />
+	<div id="box"></div>
+	<button id='but'>+</button>
+</body>
+<script>
+	function ceshi() {
+		var aa = [...arguments]
+		aa.push(111)
+		console.log(aa)
+		return new Promise((resolve,reject)=>{
+			resolve('asd')
+		})
+	}
+	ceshi(1,2323,'hann').then(data=>{
+		console.log(data)
+		return data + 'f'
+	}).then(data => {
+		console.log(data)
+		return Promise.reject(false)
+	}).then(data=>{
+		console.log(data)
+		return data + 'g'
+	}).catch(err => {
+		console.log(err)
+	})
+
+	// var key = true
+	// document.getElementById('but').onclick = function(params) {
+	// 	if(!key) return
+	// 	console.log(this)
+	// 	key = false
+	// 	setTimeout(() => {
+	// 		key = true
+	// 	}, 1000);
+	// }
+	// var arrr = []
+	// for(let i=0; i<10; i++){
+	// 	arrr.push(new Promise((resolve, reject) => {
+	// 		setTimeout(() => {
+	// 			resolve(i)
+	// 		}, 3000);
+	// 	}))
+	// }
+	// Promise.all(arrr).then((value)=>{
+	// 	console.log(value)
+	// })
+
+// var let 变量作用域
+	// for(let i=0;i<10;i++){
+ //      setTimeout(function() {
+ //          console.log(i);
+ //      },100);
+	// } //每次循环的 i 其实都是一个新的变量  定时器里面的 i 其实是不同的变量
+
+	// for(var i=0;i<10;i++){ //全局中只有一个变量 i 定时器里面的 i 其实是相同的变量
+	// 	(function(a){ //闭包的方式保存变量不被销毁 操作变量a与i无关
+ //  			setTimeout(function() {
+ //          		console.log(a);
+ //      		},100);	
+	// 	})(i)
+
+	// }
+	
+
+// function val(a) {
+//     if(a) {
+//         var rabbit = 'Rabbit';  //变量提升 已经创建 值为undefined
+//         // let rabbit = 'Rabbit';  //块级作用域 没有创建 not defined
+//         console.log(rabbit)
+//         // ...执行其他代码
+//         return rabbit;
+//     } else {
+//         // 在else里面同样也可以访问变量rabbit，其值为undefined
+//         console.log(rabbit)
+//         return null;
+//     }
+//         // 在这里也可以访问变量rabbit，其值也是undefined
+// }
+// val()
+// 
+// console.log(a); // 也是undefined
+// var a = 10;
+// 
+// 
+// let count = 10;
+// var count = 20;
+// let count1 = 10;
+// let count1 = 20; //报错
+
+// let count = 30; //不同作用域可以重复声明相同变量
+// if (true) {    
+//     let count = 40;    
+//     console.log(count);  
+//     // 输出40
+// }
+// console.log(count);  // 输出30
+// 
+// 
+// 
+// 
+// 
+
+// 闭包  函数外调用函数内部的变量
+// function num() {
+// 	var num = 99
+// 	add = function(){
+// 		num++
+// 	}
+// 	remove = function(){
+// 		num = null
+// 	}
+// 	function num2(){
+// 		console.log(num)
+// 	}
+// 	return num2
+// }
+// var a = num()
+// a()
+// add()
+// a()
+// remove()
+// a()
+// 
+// var aspan = document.getElementsByTagName('span')
+// for(var i=0;i<aspan.length;i++){
+//     aspan[i].onclick=function(i){
+//         function num(){
+//         	console.log(i)
+//         }
+//         return num
+//     }(i)
+// }
+// console.log(i)
+// 
+// 
+// 
+// 
+// 解构赋值
+// let a=1, b=2;
+// [b, a] = [a, b]
+// console.log(a, b)
+// 
+// let data = {a:1,b:2}
+// let {a,b} = data
+// console.log(a,b)
+// 
+// 
+// function saveInfo({name= 'bb', age= 18, address= 'changsha', gender= 'man'} = {}) {
+//   console.log(name, age, address, gender)
+// }
+// saveInfo({name: 'aa'})
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+//
+// function num(){
+// 		const p = new Promise(function(resolve,reject){
+// 		  resolve(1);
+// 		}).then(function(value){ // 第一个then // 1
+// 		  console.log(value);
+// 		  return value * 2;
+// 		}).then(function(value){ // 第二个then // 2
+// 		  console.log(value);
+// 		  return value*2
+// 		})	
+// 	return p
+// }
+// var a = num().then(function(data){
+// 	console.log(data)
+// })
+// 
+// async function anum() {
+// 	let a = 10
+// 	return a  //return则相当于执行了Promise.resolve(a)
+// }
+// anum().then((val) => {
+// 	console.log(val)
+// 	return val + 10  //10 
+// }).then((val)=>{
+// 	console.log(val)
+// 	return val + 10
+// }).then((val) => {
+// 	console.log(val)
+// })
+// 
+// 
+function first(data){
+	const p = new Promise((resolve,reject) => {
+		setTimeout(()=>{
+			resolve(data)
+		},2000)
+
+	})
+	return p
+}
+function second(params){
+	return params + 100
+}
+// const methods = {
+// 	first: (data) => {
+// 		return first(data)
+// 	},
+// 	second: (data) => {
+// 		return second(data)
+// 	}
+// }
+
+first(100).then((data) => {
+	var data1 = second(data)
+	console.log(data1)
+	new Promise((resolve,reject) => {
+		setTimeout(()=>{
+			resolve(data1)
+		},2000)
+
+	})
+	return data1
+}).then((data) => {
+	var data2 = second(data)
+	 console.log(data2);
+})
+
+// async function getResult(){
+// 		let data = await methods.first(100);
+// 	    let data1 = await methods.second(data);
+// 	    let data2  = await methods.second(data1)
+// 	    console.log(data1);
+// 	    console.log(data2);
+// 	}
+// getResult();
+
+
+// v-model 只是语法糖， <input v-model="message"> 与下面的两行代码是一致的：
+// <input v-bind:value="message" v-on:input="message = $event.target.value" />
+// 
+// <input :value="message" @input="message = $event.target.value" /> 
+
+
+// 修改数据属性的默认特性 Object.defineProperty(object,name,{描述符对象即数据属性的四个特性})
+// 修改访问器属性 Object.defineProperty(object,name,{描述符对象get 和 set  读取和写入函数})
+let oInp = document.getElementById('inp');
+let oBox = document.getElementById('box');
+let obj = {
+	errlist: [],
+	timer: null,
+	addArr: function(option){
+		return ()=>{
+	        if(this.errlist.indexOf(option)>=0){
+	            console.log('已存在')
+	            return
+	        }else{
+	            this.errlist.push(option);
+	            console.log('首次传入')
+	        }
+		}
+	}
+}
+
+// var ifl=isFirstLoad()
+oInp.addEventListener('input',(e) => {
+	if(obj.timer) clearTimeout(obj.timer)
+	obj.timer = setTimeout(() => {
+		obj.addArr(e.target.value)()
+	}, 500);
+	oBox.innerHTML = e.target.value
+	//输入的值在err数组中存在
+// 	if(obj.errlist.indexOf(e.target.value) > 0){
+// 		return 
+// 	} else {
+// 		//不存在就判断这个值
+// 		$.ajax({
+// 			type: post,
+// 			url: '',
+// 			data: {},
+// 			success:function(res){
+// 				// 用户名错误 存储到err数组
+// 				if(res.code == false){
+// 					obj.addArr(e.target.value)()	
+// 				}
+// 				//用户名正确 执行下一步
+// 			}
+// 		})	
+// 	}
+})
+
+// var foo =(function(){
+// 	var list=[]
+// 	return {
+// 		addArr: function(option){
+// 		        if(list.indexOf(option)>=0){
+// 		            console.log('已存在')
+// 		            return
+// 		        }else{
+// 		            list.push(option);
+// 		            console.log('首次传入')
+// 		        }
+//    			}
+// 		}
+// })()
+// var aaa = (function(obj){
+
+// })(window)
+function asdasd(target, key) {
+	let v = null
+	Object.defineProperty(target,key,{
+		get: () => {
+			return v
+		},
+		set: (newVal) => {
+			v = newVal
+			oInp.value = v
+			oBox.innerHTML = v
+		}
+	})
+}
+asdasd(obj,'value')
+// 字符串查找最多的字符
+// var str = 'sseeeeedddaaaaaaaaaaaaaaaaaaadqqq1111111333',
+//     obj = {}
+// for(i = 0; i < str.length; i++){
+//     obj[str[i]]? obj[str[i]]++ : obj[str[i]]=1;
+// 	console.log(obj[str[i]])
+// }
+// console.log(obj)
+// var iMax = 0;
+// var iIndex = '';
+// for(var i in obj){
+//         if(obj[i]>iMax){
+//                 iMax = obj[i];
+//                 iIndex = i;
+//         }
+// }
+
+function addEvent(element,type,handle) {
+    if(element.addEventListener){
+        element.addEventListener(type,handle,false);
+    }else if(element.attachEvent){
+        element.attachEvent('on'+type,function () {
+            handle.call(element);
+        })
+    }else {
+        element['on'+type] = handle;
+    }
+}
+
+
+
+var aspan = document.getElementById('name')
+addEvent(aspan,'click',function aa(e){
+	var e = e || window.event
+	var target = e.target || e.srcElement
+	if(target.nodeName == 'SPAN'){
+		console.log(target.innerHTML)
+	}
+})
+
+function stopBubble(e) {
+	if(e&&e.stopPropagation){
+		e.stopPropagation()
+	} else {
+		window.event.cancelBubble = true
+	}
+}	
+</script>
+</html>

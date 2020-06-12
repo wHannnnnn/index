@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>基于观察者模式实现数据驱动视图（vue原理）</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .view1 {
+            text-align: center;
+            color: gold;
+            animation: play 1s ease-in-out infinite;
+            -webkit-animation: play 1s ease-in-out infinite alternate;
+        }
+    </style>
+</head>
+
+<body>
+    <input class="view1" type="text">
+    <input class="view2" type="text">
+</body>
+<script>
+    // 观察者，通过upadte来执行他的行为
+    class Watcher {
+        constructor(dom) {
+            this.dom = dom
+        }
+        update(html) {
+            this.dom.value = html
+        }
+    }
+
+    // subject主体，负责收集观察者依赖并在特定实际向依赖进行播报
+    class Dep {
+        constructor() {
+            this.deps = []
+        }
+        addDep(watcher) {
+            console.log(watcher)
+            var isExists = this.deps.some(function (item) {
+                return item === watcher;
+            });
+            if (!isExists) {
+                this.deps.push(watcher)
+            }
+        }
+        notify(value) {
+            for (let i = 0; i < this.deps.length; i++) {
+                let watcher = this.deps[i]
+                watcher && watcher.update(value)
+            }
+        }
+    }
+
+    // 定义一个响应式的对象属性
+    function defineReactive(target, key, watcher) {
+        let dep = new Dep()
+        watcher.forEach(ele => {
+            dep.addDep(ele)
+        });
+        let v = null
+        Object.defineProperty(target, key, {
+            get() {
+                return v
+            },
+            set(value) {
+                v = value
+                dep.notify(v)
+            }
+        })
+    }
+
+    // 获取类名为view1元素的dom对象
+    let view1 = document.querySelector('.view1')
+    let view2 = document.querySelector('.view2')
+
+    let watcher = new Watcher(view1)
+    let watcher2 = new Watcher(view2)
+
+    let model = {
+        value: ''
+    }
+    // 将model的value定义为响应式属性并与watcher绑定在一起
+    defineReactive(model, 'value', [watcher, watcher2])
+
+    view1.addEventListener('change', function () {
+        model.value = this.value
+    })
+
+</script>
+
+</html>

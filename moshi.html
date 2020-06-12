@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+        <input type="button" id="pub1" value="点击"><input type="text" id="txt1" value=''> <br>
+        <input type="button" id="pub2" value="解绑"><input type="text" id="txt2" value=''> <br>
+        
+        <textarea name="" id="sub1" cols="30" rows="10"></textarea>
+        <textarea name="" id="sub2" cols="30" rows="10"></textarea>
+</body>
+<script>
+        // function Publish(name) {
+        //     this.subscribers = []; //接受所有的订阅者（每一个元素是函数类型fn的数组）
+        // }
+        // 对象发布消息的方法
+        // Publish.prototype.deliver = function (news) {
+        //     this.subscribers.forEach(fn => {
+        //         // 把新消息发给一个订阅者
+        //         fn(news);
+        //     });
+        //     // 链式编程
+        //     return this;
+        // }
+        // // 订阅
+        // Publish.prototype.subscribe = function (fn) {
+        //     var isExists = this.subscribers.some(function (item) {
+        //         return item === fn;
+        //     });
+        //     if (!isExists) {
+        //         this.subscribers.push(fn);
+        //     }
+        //     return this;
+        // }
+
+        // // 取消订阅的方法
+        // Publish.prototype.unsubscribe = function (fn) {
+        //     this.subscribers = this.subscribers.filter(function (item) {
+        //         return item !== fn;
+        //     });
+        //     return this;
+        // }
+
+        class Publish {
+            constructor(){
+                this.subscribers = []
+            }
+            subscribe(fn){
+                var isExists = this.subscribers.some(function (item) {
+                    return item === fn;
+                });
+                if (!isExists) {
+                    this.subscribers.push(fn);
+                }
+                return this;
+            }
+            unsubscribe(fn){
+                this.subscribers = this.subscribers.filter(function (item) {
+                    return item !== fn;
+                });
+                return this;
+            }
+            deliver(news){
+                this.subscribers.forEach(fn => {
+                    // 把新消息发给一个订阅者
+                    fn(news);
+                });
+                // 链式编程
+                return this; 
+            }
+        }
+        
+        // 定义 2个订阅者
+        var sub1 = function (news) {
+            document.getElementById('sub1').innerHTML +=  news + '\n';
+        }
+        var sub2 = function (news) {
+            document.getElementById('sub2').innerHTML +=  news + '\n';
+        }
+        // 发布者
+        var pub1 = new Publish();
+        // 订阅者绑定
+        pub1.subscribe(sub1).subscribe(sub2)
+        // 事件 发布消息
+        document.getElementById('pub1').onclick = function () {
+            pub1.deliver(document.getElementById('txt1').value)
+        }
+        
+        document.getElementById('pub2').onclick = function () {
+            // 解绑
+            pub1.unsubscribe(sub1)
+        }
+
+</script>
+</html>
